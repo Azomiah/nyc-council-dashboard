@@ -1,31 +1,63 @@
-from rest_framework import viewsets
-from .models import UserProfile, Complaint
-from .serializers import UserSerializer, UserProfileSerializer, ComplaintSerializer
+# complaint_app/views.py
+
+from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-# Create your views here.
+from rest_framework.permissions import IsAuthenticated
+from .models import Complaint
+from .serializers import ComplaintSerializer
+from django.db.models import Count
 
-class ComplaintViewSet(viewsets.ModelViewSet):
-  http_method_names = ['get']
-  serializer_class = ComplaintSerializer
-  def list(self, request):
-    # Get all complaints from the user's district
-    return Response()
 
-class OpenCasesViewSet(viewsets.ModelViewSet):
-  http_method_names = ['get']
-  def list(self, request):
-    # Get only the open complaints from the user's district
-    return Response()
+def get_user_district(request):
+    user = request.user
+    # Allow district override for admin users via query param
+    if user.is_staff and 'district' in request.query_params:
+        return request.query_params.get('district')
+    # Default behavior: use user's own district with padding
+    raw_district = user.userprofile.district
+    return raw_district if len(raw_district) == 3 else f"{raw_district[0]}0{raw_district[1]}"
 
-class ClosedCasesViewSet(viewsets.ModelViewSet):
-  http_method_names = ['get'] 
-  def list(self, request):
-    # Get only complaints that are close from the user's district
-    return Response()
-    
-class TopComplaintTypeViewSet(viewsets.ModelViewSet):
-  http_method_names = ['get']
-  def list(self, request):
-    # Get the top 3 complaint types from the user's district
-    return Response()
+
+class OpenCasesView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        district = get_user_district(request)
+        complaints = Complaint.objects.filter(closedate__isnull=True, account=district)
+        serializer = ComplaintSerializer(complaints, many=True)
+        return Response(serializer.data)
+
+
+class ClosedCasesView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        district = get_user_district(request)
+        complaints = Complaint.objects.filter(closedate__isnull=False, account=district)
+        serializer = ComplaintSerializer(complaints, many=True)
+        return Response(serializer.data)
+
+
+class TopComplaintTypeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        district = get_user_district(request)
+        top_types = (
+            Complaint.objects
+            .filter(account=district)
+            .values('complaint_type')
+            .annotate(count=Count('id'))
+            .order_by('-count')[:5]
+        )
+        return Response(top_types)
+
+
+class ResidentComplaintsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        district = get_user_district(request)
+        complaints = Complaint.objects.filter(council_dist=district)
+        serializer = ComplaintSerializer(complaints, many=True)
+        return Response(serializer.data)

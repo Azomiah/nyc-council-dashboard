@@ -1,12 +1,12 @@
-from django.urls import path
-from rest_framework import routers
-from .views import ComplaintViewSet, OpenCasesViewSet, ClosedCasesViewSet, TopComplaintTypeViewSet
+# complaint_app/urls.py
 
-router = routers.SimpleRouter()
-router.register(r'allComplaints', ComplaintViewSet, basename='complaint')
-router.register(r'openCases', OpenCasesViewSet, basename='openCases')
-router.register(r'closedCases', ClosedCasesViewSet, basename='closedCases')
-router.register(r'topComplaints', TopComplaintTypeViewSet, basename='topComplaints')
+from django.urls import path
+from .views import OpenCasesView, ClosedCasesView, TopComplaintTypeView, ResidentComplaintsView
+
 urlpatterns = [
+    path('open-cases/', OpenCasesView.as_view(), name='open-cases'),
+    path('top-complaint-types/', TopComplaintTypeView.as_view(), name='top-complaint-types'),
+    path('closed-cases/', ClosedCasesView.as_view(), name='closed-cases'),
+        path('resident-complaints/', ResidentComplaintsView.as_view(), name='resident-complaints'),  # ← new
+
 ]
-urlpatterns += router.urls

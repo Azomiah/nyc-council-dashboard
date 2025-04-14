@@ -1,0 +1,108 @@
+/* challenge/frontend/src/pages/Dashboard.module.css */
+
+/* Layout */
+.dashboardContainer {
+    padding: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+    font-family: 'Arial', sans-serif;
+    background-color: #fff;
+    color: #333;
+  }
+  
+  /* Header */
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 1rem;
+  }
+  
+  .logo {
+    height: 60px;
+    width: auto;
+  }
+  
+  .siteTitle {
+    font-size: 1.75rem;
+    font-family: 'Georgia', serif;
+    color: #003366;
+    margin: 0;
+  }
+  
+  /* Button Group */
+  .buttonGroup {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+  
+  .tabButton {
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    color: #333;
+    padding: 0.5rem 1.25rem;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .tabButton:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .activeButton {
+    background-color: #003366;
+    color: white;
+    border-color: #003366;
+    font-weight: bold;
+  }
+  
+  /* Complaint List */
+  .complaintList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1.25rem;
+  }
+  
+  .complaintItem {
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .complaintItem strong {
+    color: #000;
+    font-weight: 600;
+  }
+  
+  .statusOpen {
+    font-weight: 600;
+    color: #28a745;
+    margin-left: 0.5rem;
+  }
+  
+  .statusClosed {
+    font-weight: 600;
+    color: #dc3545;
+    margin-left: 0.5rem;
+  }
+  
+  .footer {
+    margin-top: auto;
+    padding: 1.5rem 0;
+    text-align: center;
+    font-size: 0.85rem;
+    color: #777;
+    border-top: 1px solid #ddd;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
