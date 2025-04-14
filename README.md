@@ -74,26 +74,30 @@ source env/bin/activate  # or .\env\Scripts\activate on Windows
 pip install -r requirements.txt
 ```
 
-4. Run migrations and seed the database:
+4. Run migrations:
 
 ```bash
 python manage.py migrate
-python manage.py populate_db
 ```
 
-5. Create a superuser:
+5. Seed the database with clean demo complaints (2 per district):
+
+```bash
+python manage.py generate_clean_demo_data
+```
+
+6. Create a superuser:
 
 ```bash
 python manage.py createsuperuser
 ```
 
-6. Start the server:
+7. Start the server:
 
 ```bash
 python manage.py runserver
 ```
 
----
 
 ### Frontend Setup (React)
 
